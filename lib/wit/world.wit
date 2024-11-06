@@ -1,0 +1,22 @@
+package component:image-manipulation-lib;
+
+/// An example world for image manipulation.
+world image {
+    export image-manipulation;
+}
+
+
+/// Image manipulation interface.
+interface image-manipulation {
+    /// Error returned by image manipulation components.
+    variant image-error {
+        image-error(string),
+        io-error(string),
+        unknown(string),
+    }
+    /// Type representing an image.
+    type image = list<u8>;
+
+    /// Apply the grayscale transformation to the input image.
+    grayscale: func(img: image, quality: u8) -> result<image, image-error>;
+}
