@@ -20,3 +20,18 @@ watch = ["src/**/*.rs", "Cargo.toml"]
 
 [component.image-manipulation-http-rs.dependencies]
 "component:image-manipulation-lib/image-manipulation" = { version = "^1.0.0", registry = "fermyon.com", package = "fermyon-experimental:image-manipulation-lib" }
+
+[[trigger.http]]
+route = "/api/ts/..."
+component = "image-manipulation-http-ts"
+
+[component.image-manipulation-http-ts]
+source = "image-manipulation-http-ts/target/image-manipulation-http-ts.wasm"
+allowed_outbound_hosts = []
+
+[component.image-manipulation-http-ts.build]
+command = "npm run build"
+workdir = "image-manipulation-http-ts"
+
+[component.image-manipulation-http-ts.dependencies]
+"component:image-manipulation-lib/image-manipulation" = { version = "^1.0.0", registry = "fermyon.com", package = "fermyon-experimental:image-manipulation-lib" }

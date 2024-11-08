@@ -37,3 +37,18 @@ $ spin deps add --registry fermyon.com fermyon-experimental:image-manipulation-l
 ```
 $ spin deps generate-bindings --language rust --output image-manipulation-http-rs/src/bindings --component-id image-manipulation-http-rs
 ```
+
+## Building the TypeScript component
+
+```
+cd image-manipulation-http-ts
+npm install
+spin build
+```
+
+Things to note: 
+- The `webpack` config adds an `externals` field to specify the component imports.
+- The `knitwit.json` adds an entry for the world and `wit` produced by `spin deps add`.
+- If the `knitwit.json` is altered manually, one has to run `npx knitwit` to update generated `combined-wit`.
+
+**Known limitation**: images larger than 400kb seem to lead to wasm traps which needs further investigation.  
