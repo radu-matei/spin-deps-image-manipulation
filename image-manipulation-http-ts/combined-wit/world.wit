@@ -1452,6 +1452,8 @@ package component:image-manipulation-lib {
     type image = list<u8>;
 
     grayscale: func(img: image, quality: u8) -> result<image, image-error>;
+
+    sepia: func(img: image, quality: u8) -> result<image, image-error>;
   }
 }
 

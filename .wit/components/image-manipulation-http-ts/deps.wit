@@ -3,6 +3,30 @@ package spin-deps:deps@0.1.0;
 world deps {
   import component:image-manipulation-lib/image-manipulation;
 }
+package component:image-manipulation-lib {
+  interface image-manipulation {
+    variant image-error {
+      image-error(string),
+      io-error(string),
+      unknown(string),
+    }
+
+    type image = list<u8>;
+
+    grayscale: func(img: image, quality: u8) -> result<image, image-error>;
+
+    sepia: func(img: image, quality: u8) -> result<image, image-error>;
+  }
+}
+
+
+package root:component {
+  world dependency-world {
+    import component:image-manipulation-lib/image-manipulation;
+  }
+}
+
+
 package wasi:io@0.2.0 {
   interface error {
     resource error;
@@ -152,27 +176,5 @@ package wasi:filesystem@0.2.0 {
 package wasi:random@0.2.0 {
   interface random {
     get-random-bytes: func(len: u64) -> list<u8>;
-  }
-}
-
-
-package component:image-manipulation-lib {
-  interface image-manipulation {
-    variant image-error {
-      image-error(string),
-      io-error(string),
-      unknown(string),
-    }
-
-    type image = list<u8>;
-
-    grayscale: func(img: image, quality: u8) -> result<image, image-error>;
-  }
-}
-
-
-package root:component {
-  world dependency-world {
-    import component:image-manipulation-lib/image-manipulation;
   }
 }

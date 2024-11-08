@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Image Transformations powered by Spin</title>
+	<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 font-sans antialiased">
+	<header class="bg-indigo-600 py-6 shadow-lg">
+		<h1 class="text-center text-3xl font-bold text-white">Image Transformations powered by Spin and Wasm components
+		</h1>
+	</header>
+	<main class="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+		<div class="mb-4">
+			<label for="filter" class="block text-gray-700 font-semibold mb-2">Choose an image transformation</label>
+			<select id="filter"
+				class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
+				<option value="/api/ts/grayscale">Grayscale</option>
+				<option value="/api/ts/sepia">Sepia</option>
+			</select>
+		</div>
+		<div class="mb-6">
+			<label for="image" class="block text-gray-700 font-semibold mb-2">Upload an image:</label>
+			<input type="file" id="image" accept="image/*"
+				class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
+		</div>
+		<button onclick="transform()"
+			class="w-full bg-indigo-600 text-white font-bold py-2 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+			Transform Image
+		</button>
+	</main>
+	<section id="original" class="w-full max-w-screen-lg mx-auto mt-6 p-4 text-center"
+		style="padding-left: 5%; padding-right: 5%;"></section>
+	<section id="result" class="w-full max-w-screen-lg mx-auto mt-6 p-4 text-center"
+		style="padding-left: 5%; padding-right: 5%;"></section>
+	<script type="text/javascript">
+		async function transform() {
+			const filter = document.getElementById("filter").value;
+			const fileInput = document.getElementById("image");
+			const file = fileInput.files[0];
+			const original = document.getElementById("original");
+			const transformed = document.getElementById("result");
+			if (!file) {
+				console.error("No file selected");
+				return false;
+			}
+
+			const ab = await file.arrayBuffer();
+			const ba = new Uint8Array(ab);
+			try {
+				const response = await fetch(filter, {
+					method: "POST",
+					headers: {
+						"content-type": "application/octet-stream",
+					},
+					body: ba
+				});
+				if (!response.ok) throw new Error("Request returned a bad response code");
+
+				const transformedImageBlob = await response.blob();
+				appendImage(original, new Blob([ab], {type: file.type}), "Original Image");
+				appendImage(transformed, transformedImageBlob, "Transformed Image");
+			} catch (err) {
+				console.error(err);
+			} finally {
+				return false;
+			}
+		}
+
+		function appendImage(targetElement, imageBlob, caption) {
+			const url = URL.createObjectURL(imageBlob);
+			targetElement.innerHTML = '';
+			const img = document.createElement("img");
+			img.src = url;
+			img.alt = caption;
+			img.style.maxWidth = "100%";
+			const header = document.createElement("h2");
+			header.innerText = caption;
+			header.className = "text-xl text-center"
+			targetElement.appendChild(header);
+			targetElement.appendChild(img);
+		}
+	</script>
+</body>
+
+</html>
