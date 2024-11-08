@@ -19,4 +19,7 @@ interface image-manipulation {
 
     /// Apply the grayscale transformation to the input image.
     grayscale: func(img: image, quality: u8) -> result<image, image-error>;
+
+    /// Apply the sepia transformation to the input image.
+    sepia: func(img: image, quality: u8) -> result<image, image-error>;
 }
