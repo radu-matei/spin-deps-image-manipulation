@@ -32,10 +32,12 @@
 			Transform Image
 		</button>
 	</main>
-	<section id="original" class="w-full max-w-screen-lg mx-auto mt-6 p-4 text-center"
-		style="padding-left: 5%; padding-right: 5%;"></section>
-	<section id="result" class="w-full max-w-screen-lg mx-auto mt-6 p-4 text-center"
-		style="padding-left: 5%; padding-right: 5%;"></section>
+	<div style="display: flex">
+		<section id="original" class="w-full max-w-screen-lg mx-auto mt-6 p-4 text-center"
+			style="padding-left: 5%; padding-right: 5%;"></section>
+		<section id="result" class="w-full max-w-screen-lg mx-auto mt-6 p-4 text-center"
+			style="padding-left: 5%; padding-right: 5%;"></section>
+	</div>
 	<script type="text/javascript">
 		async function transform() {
 			const filter = document.getElementById("filter").value;
